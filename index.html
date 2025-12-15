@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grand Vibe City RP</title>
+
+<meta name="description" content="Grand Vibe City RP – A next-generation SA-MP roleplay server." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* SOCIAL ICON ANIMATIONS */
+.social-icons{display:flex;justify-content:center;gap:30px;font-size:2.2rem;margin-bottom:40px;background:transparent}
+.social-icons a{color:#fff;transition:transform .35s ease,box-shadow .35s ease,color .35s ease;background:transparent;outline:none;-webkit-tap-highlight-color:transparent}
+.social-icons a:hover{transform:translateY(-6px) scale(1.15);color:var(--p);box-shadow:0 10px 30px rgba(155,77,255,.6)}
+
+:root{--p:#9b4dff;--s:#5865f2;--bg:#05050a;--glass:rgba(20,20,40,.7)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:#fff}
+
+.bg{position:fixed;inset:0;background:url('1000409323.png') center/cover no-repeat;z-index:-2}
+.bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,10,.75),rgba(5,5,10,.95))}
+
+nav{position:fixed;top:0;width:100%;padding:16px 8%;display:flex;align-items:center;justify-content:space-between;z-index:1000}
+.logo{font-family:Orbitron;color:var(--p)}
+.nav-links{list-style:none;display:flex;gap:24px}
+.nav-links a{color:#fff;text-decoration:none}
+.hamburger{display:none;flex-direction:column;cursor:pointer;transition:transform .3s ease}
+.hamburger span{width:26px;height:3px;background:#fff;margin:4px 0;transition:transform .35s ease,opacity .35s ease}
+.lang{background:none;border:1px solid var(--p);color:#fff;padding:6px 10px;border-radius:8px}
+
+@media(max-width:900px){
+.hamburger{display:flex}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+.hamburger{display:flex}
+.nav-links{position:fixed;top:70px;right:-100%;flex-direction:column;background:var(--glass);padding:30px;width:240px;transition:.4s}
+.nav-links.active{right:0}
+}
+
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 6%}
+h1{font-family:Orbitron;font-size:clamp(2rem,7vw,3.2rem);text-shadow:0 0 20px var(--p)}
+.title{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.title span{opacity:0;transform:translateY(30px);transition:.6s}
+
+.cta{margin-top:30px;padding:16px 42px;border-radius:50px;background:linear-gradient(135deg,var(--s),var(--p));color:#fff;text-decoration:none;font-weight:600}
+
+section{padding:100px 10%}
+h2{text-align:center;color:var(--p);font-family:Orbitron;margin-bottom:30px}
+.glass{background:var(--glass);padding:40px;border-radius:18px}
+
+.faq{display:flex;flex-direction:column;gap:16px}
+.faq-item{border-radius:12px;overflow:hidden}
+.faq-question{width:100%;background:rgba(0,0,0,.4);color:#fff;padding:14px 18px;border:none;text-align:left;font-size:1rem;cursor:pointer;display:flex;gap:10px}
+.faq-answer{max-height:0;overflow:hidden;background:rgba(0,0,0,.25);padding:0 18px;transition:max-height .45s ease,padding .45s ease,opacity .3s ease;opacity:0}
+.faq-item.active .faq-answer{max-height:300px;padding:14px 18px;opacity:1}
+
+footer{text-align:center;padding:30px;opacity:.7}
+
+@media(max-width:768px){section{padding:70px 6%}}
+
+/* FIX: Mobile tap highlight / black box on Community icons */
+.social-icons a{
+  color:#fff;
+  transition:transform .35s ease, box-shadow .35s ease, color .35s ease;
+  background:transparent;
+  outline:none;
+  -webkit-tap-highlight-color: transparent;
+}
+.social-icons a:focus,
+.social-icons a:active{
+  background:transparent;
+  outline:none;
+}
+
+
+/* HARD FIX: remove Android tap/focus background completely */
+.social-icons{background:transparent !important}
+.social-icons a,
+.social-icons a *{
+  background-color:transparent !important;
+  box-shadow:none !important;
+  outline:none !important;
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.social-icons a:focus,
+.social-icons a:active,
+.social-icons a:focus-visible{
+  background-color:transparent !important;
+  box-shadow:none !important;
+  outline:none !important;
+}
+
+
+/* ===== GLOBAL SCROLL & FADE ANIMATIONS ===== */
+.reveal{
+  opacity:0;
+  transform:translateY(40px) scale(0.98);
+  transition:opacity .9s ease, transform .9s ease;
+}
+.reveal.active{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+
+/* HERO TEXT GLOW PULSE */
+@keyframes glowPulse{
+  0%{text-shadow:0 0 12px rgba(155,77,255,.6)}
+  50%{text-shadow:0 0 32px rgba(155,77,255,1)}
+  100%{text-shadow:0 0 12px rgba(155,77,255,.6)}
+}
+h1{animation:glowPulse 3s infinite}
+
+/* CTA BUTTON ANIMATION */
+.cta{position:relative;overflow:hidden}
+.cta::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:translateX(-100%);
+}
+.cta:hover::after{animation:shine 1.2s ease}
+@keyframes shine{to{transform:translateX(100%)}}
+
+/* SECTION TITLE FLOAT */
+h2{animation:floatTitle 6s ease-in-out infinite}
+@keyframes floatTitle{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+
+/* ===== ADVANCED ANIMATIONS (SAFE) ===== */
+
+/* PARALLAX BACKGROUND */
+.bg{will-change:transform}
+
+/* STAGGER ANIMATION */
+.stagger>*{opacity:0;transform:translateY(30px);transition:.6s}
+.stagger.active>*{opacity:1;transform:none}
+.stagger.active>*:nth-child(1){transition-delay:.1s}
+.stagger.active>*:nth-child(2){transition-delay:.25s}
+.stagger.active>*:nth-child(3){transition-delay:.4s}
+.stagger.active>*:nth-child(4){transition-delay:.55s}
+
+/* DISCORD PULSE */
+.social-icons a.discord{
+  animation:discordPulse 2.5s infinite;
+}
+@keyframes discordPulse{
+  0%{box-shadow:0 0 0 rgba(88,101,242,.7)}
+  50%{box-shadow:0 0 30px rgba(88,101,242,1)}
+  100%{box-shadow:0 0 0 rgba(88,101,242,.7)}
+}
+
+/* REDUCED MOTION SUPPORT */
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+
+/* ===== PARTICLES & CURSOR ===== */
+canvas#particles{position:fixed;inset:0;z-index:-1}
+.cursor-glow{position:fixed;width:22px;height:22px;border-radius:50%;border:2px solid var(--p);pointer-events:none;transform:translate(-50%,-50%);z-index:2000;opacity:.8;transition:transform .1s}
+
+/* ===== PAGE LOADER ===== */
+.page-loader{position:fixed;inset:0;background:#05050a;display:flex;align-items:center;justify-content:center;z-index:5000}
+.page-loader span{width:12px;height:12px;margin:6px;background:var(--p);border-radius:50%;animation:loaderBounce .6s infinite alternate}
+.page-loader span:nth-child(2){animation-delay:.2s}
+.page-loader span:nth-child(3){animation-delay:.4s}
+@keyframes loaderBounce{to{transform:translateY(-18px);opacity:.4}}
+
+/* ===== CLICK RIPPLE ===== */
+.click-ripple{position:fixed;width:10px;height:10px;border-radius:50%;background:rgba(155,77,255,.6);pointer-events:none;transform:translate(-50%,-50%);animation:ripple .6s ease-out}
+@keyframes ripple{to{width:80px;height:80px;opacity:0}}
+
+</style>
+</head>
+<body>
+<div class="page-loader" id="loader"><span></span><span></span><span></span></div>
+<canvas id="particles"></canvas>
+<div class="cursor-glow" id="cursor"></div>
+
+<div class="bg" id="bg"></div>
+
+<nav>
+  <div class="logo">GVC RP</div>
+  <select class="lang" id="langSelect"><option value="en">EN</option><option value="hi">HI</option></select>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a data-i18n="home" href="#home">Home</a></li>
+    <li><a data-i18n="about" href="#about">About</a></li>
+    <li><a data-i18n="rules" href="#rules">Rules</a></li>
+    <li><a data-i18n="faqTitle" href="#faq">FAQ</a></li>
+  </ul>
+</nav>
+
+<header id="home" class="reveal">
+  <h1 class="title">
+    <span>GRAND</span><span>VIBE</span><span>CITY</span><span>RP</span>
+  </h1>
+  <p data-i18n="tagline">A next-generation roleplay server built on realism and creativity.</p>
+  <a class="cta" href="https://discord.gg/Qqzwj9tMk8" target="_blank">Join Discord</a>
+</header>
+
+<section id="about" class="reveal">
+  <h2 data-i18n="aboutTitle">About</h2>
+  <div class="glass stagger">
+    <p data-i18n="aboutP1">Grand Vibe City RP is a serious SA-MP roleplay server focused on realism.</p>
+    <p data-i18n="aboutP2">We offer custom systems, factions, businesses, and balanced economy.</p>
+    <p data-i18n="aboutP3">Our staff ensures fair, immersive, and respectful roleplay.</p>
+  </div>
+</section>
+
+<section id="rules" class="reveal">
+  <h2 data-i18n="rulesTitle">Roleplay Rules</h2>
+  <div class="glass stagger">
+    <h3 data-i18n="rulesGeneral">General Conduct</h3>
+    <ul>
+      <li data-i18n="r1">Respect all players and staff.</li>
+      <li data-i18n="r2">No harassment, hate speech, or toxic behavior.</li>
+      <li data-i18n="r3">Follow staff instructions at all times.</li>
+      <li data-i18n="r4">Bug abuse or exploiting is strictly prohibited.</li>
+      <li data-i18n="r5">Cheating or unfair modifications result in permanent bans.</li>
+    </ul>
+
+    <h3 data-i18n="rulesRoleplay">Roleplay Standards</h3>
+    <ul>
+      <li data-i18n="r6">You must stay in character (IC) at all times.</li>
+      <li data-i18n="r7">Metagaming (using OOC info IC) is not allowed.</li>
+      <li data-i18n="r8">Powergaming or unrealistic actions are forbidden.</li>
+      <li data-i18n="r9">Always value your character's life.</li>
+      <li data-i18n="r10">FearRP must be followed in dangerous situations.</li>
+    </ul>
+
+    <h3 data-i18n="rulesCombat">Combat & Violence</h3>
+    <ul>
+      <li data-i18n="r11">Random Deathmatch (RDM) and Vehicle Deathmatch (VDM) are prohibited.</li>
+      <li data-i18n="r12">Proper roleplay initiation is required before violence.</li>
+      <li data-i18n="r13">No kill-on-sight unless explicitly permitted.</li>
+      <li data-i18n="r14">Revenge killing without RP justification is not allowed.</li>
+    </ul>
+
+    
+
+    <h3 data-i18n="rulesPunish">Punishments</h3>
+    <ul>
+      <li data-i18n="r15">Punishments include warnings, jail, temporary bans, or permanent bans.</li>
+      <li data-i18n="r16">Repeated rule violations lead to harsher penalties.</li>
+      <li data-i18n="r17">Ignorance of rules is not an excuse.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="features">
+  <h2 data-i18n="featuresTitle">Server Features</h2>
+  <div class="glass stagger">
+    <ul>
+      <li data-i18n="feat1">Realistic job system (Taxi, Trucker, Mechanic, Lawyer, Reporter, Fisherman, etc.)</li>
+      <li data-i18n="feat2">Advanced business system with ownership and income</li>
+      <li data-i18n="feat3">Balanced economy with realistic prices</li>
+      <li data-i18n="feat4">Custom vehicles and mapping</li>
+      <li data-i18n="feat5">Interactive interiors and roleplay commands</li>
+      <li data-i18n="feat6">Anti-cheat and admin monitoring systems</li>
+      <li data-i18n="feat7">Frequent updates and community-driven features</li>
+    </ul>
+  </div>
+</section>
+
+<section id="factions">
+  <h2 data-i18n="factionTitle">Faction Rules</h2>
+  <div class="glass stagger">
+    <h3 data-i18n="policeTitle">Police Department</h3>
+    <ul>
+      <li data-i18n="pd1">Officers must follow chain of command.</li>
+      <li data-i18n="pd2">Use force only when roleplay-justified.</li>
+      <li data-i18n="pd3">No corruption without admin approval.</li>
+      <li data-i18n="pd4">Professional behavior is mandatory.</li>
+    </ul>
+
+    <h3 data-i18n="emsTitle">EMS / Medical Services</h3>
+    <ul>
+      <li data-i18n="ems1">Always prioritize saving lives.</li>
+      <li data-i18n="ems2">No refusal of emergency roleplay.</li>
+      <li data-i18n="ems3">Maintain realistic medical roleplay.</li>
+    </ul>
+
+    <h3 data-i18n="gangTitle">Criminal Gangs</h3>
+    <ul>
+      <li data-i18n="gang1">Gang actions must have valid roleplay reasons.</li>
+      <li data-i18n="gang2">No random shootings or kidnappings.</li>
+      <li data-i18n="gang3">Gang wars require admin approval.</li>
+      <li data-i18n="gang4">Respect FearRP at all times.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="faq" class="reveal">
+  <h2 data-i18n="faqTitle">FAQ</h2>
+  <div class="glass faq">
+    <div class="faq-item"><button class="faq-question">❓ <span data-i18n="faq1q">What is SA-MP?</span></button><div class="faq-answer" data-i18n="faq1a">SA-MP is a multiplayer mod for GTA San Andreas.</div></div>
+    <div class="faq-item"><button class="faq-question">🆕 <span data-i18n="faq2q">Beginner friendly?</span></button><div class="faq-answer" data-i18n="faq2a">Yes, new players are welcome.</div></div>
+    <div class="faq-item"><button class="faq-question">💬 <span data-i18n="faq3q">Is Discord required?</span></button><div class="faq-answer" data-i18n="faq3a">Yes, Discord is mandatory.</div></div>
+    <div class="faq-item"><button class="faq-question">🔒 <span data-i18n="faq4q">Whitelist server?</span></button><div class="faq-answer" data-i18n="faq4a">Some features require approval.</div></div>
+  </div>
+</section>
+
+<section id="community" class="reveal">
+  <h2>Community</h2>
+  <div class="social-icons">
+    <a class="discord" href="https://discord.gg/Qqzwj9tMk8" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+    <a href="https://youtube.com/@grandvibecity?si=xQaXeedGk3oX8era" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="https://www.instagram.com/grandvibecity?igsh=ZTJhNm9va3MzMnJl" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  </div>
+</section>
+
+<footer>© 2025 Grand Vibe City RP</footer>
+
+<script>
+// ================= NAV (HAMBURGER) =================
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+}
+
+// ================= TITLE ANIMATION =================
+document.querySelectorAll('.title span').forEach((word, i) => {
+  setTimeout(() => {
+    word.style.opacity = '1';
+    word.style.transform = 'translateY(0)';
+  }, 300 + i * 250);
+});
+
+// ================= FAQ ACCORDION =================
+const faqItems = document.querySelectorAll('.faq-item');
+faqItems.forEach(item => {
+  const btn = item.querySelector('.faq-question');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    faqItems.forEach(i => {
+      if (i !== item) i.classList.remove('active');
+    });
+    item.classList.toggle('active');
+  });
+});
+
+// ================= TRANSLATIONS =================
+const dict = {
+  en: {
+    home: 'Home',
+    about: 'About',
+    rules: 'Rules',
+    faqTitle: 'FAQ',
+    featuresTitle: 'Server Features',
+    factionTitle: 'Faction Rules',
+    policeTitle: 'Police Department',
+    emsTitle: 'EMS / Medical Services',
+    gangTitle: 'Criminal Gangs',
+    tagline: 'A next-generation roleplay server built on realism and creativity.',
+
+    aboutTitle: 'About Grand Vibe City RP',
+    aboutP1: 'Grand Vibe City RP is a serious SA-MP roleplay server focused on realism.',
+    aboutP2: 'We offer custom systems, factions, businesses, and a balanced economy.',
+    aboutP3: 'Our staff ensures fair, immersive, and respectful roleplay.',
+
+    rulesTitle: 'Roleplay Rules',
+    rulesGeneral: 'General Conduct',
+    rulesRoleplay: 'Roleplay Standards',
+    rulesCombat: 'Combat & Violence',
+    rulesPunish: 'Punishments',
+
+    r1: 'Respect all players and staff.',
+    r2: 'No harassment, hate speech, or toxic behavior.',
+    r3: 'Follow staff instructions at all times.',
+    r4: 'Bug abuse or exploiting is strictly prohibited.',
+    r5: 'Cheating or unfair modifications result in permanent bans.',
+    r6: 'You must stay in character (IC) at all times.',
+    r7: 'Metagaming is not allowed.',
+    r8: 'Powergaming or unrealistic actions are forbidden.',
+    r9: 'Always value your character life.',
+    r10: 'FearRP must be followed in dangerous situations.',
+    r11: 'RDM and VDM are prohibited.',
+    r12: 'Proper roleplay initiation is required before violence.',
+    r13: 'Kill-on-sight is not allowed.',
+    r14: 'Revenge killing without RP is forbidden.',
+    r15: 'Punishments include warnings, jail, temp bans, or permanent bans.',
+    r16: 'Repeated violations lead to harsher penalties.',
+    r17: 'Ignorance of rules is not an excuse.',
+
+    feat1: 'Realistic job system (Taxi, Trucker, Mechanic, etc.)',
+    feat2: 'Advanced business ownership system',
+    feat3: 'Balanced economy',
+    feat4: 'Custom vehicles and mapping',
+    feat5: 'Interactive interiors and RP commands',
+    feat6: 'Anti-cheat and admin monitoring',
+    feat7: 'Regular updates',
+
+    pd1: 'Officers must follow chain of command.',
+    pd2: 'Use force only when justified.',
+    pd3: 'No corruption without admin approval.',
+    pd4: 'Professional conduct is mandatory.',
+
+    ems1: 'Saving lives is the top priority.',
+    ems2: 'EMS cannot refuse emergency RP.',
+    ems3: 'Maintain realistic medical RP.',
+
+    gang1: 'Gang actions require valid RP reasons.',
+    gang2: 'No random shootings or kidnappings.',
+    gang3: 'Gang wars require admin approval.',
+    gang4: 'Respect FearRP at all times.',
+
+    faq1q: 'What is SA-MP?',
+    faq1a: 'SA-MP is a multiplayer mod for GTA San Andreas.',
+    faq2q: 'Is this server beginner friendly?',
+    faq2a: 'Yes, new players are fully supported.',
+    faq3q: 'Is Discord required?',
+    faq3a: 'Yes, Discord is mandatory.',
+    faq4q: 'Is the server whitelist?',
+    faq4a: 'Some features require approval.'
+  },
+  hi: {
+    home: 'होम',
+    about: 'परिचय',
+    rules: 'नियम',
+    faqTitle: 'सामान्य प्रश्न',
+    featuresTitle: 'सर्वर सुविधाएँ',
+    factionTitle: 'फैक्शन नियम',
+    policeTitle: 'पुलिस विभाग',
+    emsTitle: 'EMS / मेडिकल सेवाएँ',
+    gangTitle: 'आपराधिक गिरोह',
+    tagline: 'यथार्थवाद और रचनात्मकता पर आधारित अगली पीढ़ी का रोलप्ले सर्वर।',
+
+    aboutTitle: 'ग्रैंड वाइब सिटी आरपी के बारे में',
+    aboutP1: 'ग्रैंड वाइब सिटी आरपी एक गंभीर SA-MP रोलप्ले सर्वर है।',
+    aboutP2: 'हम कस्टम सिस्टम, फैक्शन और संतुलित अर्थव्यवस्था प्रदान करते हैं।',
+    aboutP3: 'हमारी स्टाफ टीम निष्पक्ष और गुणवत्तापूर्ण रोलप्ले सुनिश्चित करती है।',
+
+    rulesTitle: 'रोलप्ले नियम',
+    rulesGeneral: 'सामान्य नियम',
+    rulesRoleplay: 'रोलप्ले मानक',
+    rulesCombat: 'लड़ाई और हिंसा',
+    rulesPunish: 'दंड',
+
+    r1: 'सभी खिलाड़ियों और स्टाफ का सम्मान करें।',
+    r2: 'उत्पीड़न या घृणा भाषण मना है।',
+    r3: 'स्टाफ के निर्देशों का पालन करें।',
+    r4: 'बग का दुरुपयोग मना है।',
+    r5: 'चीटिंग पर स्थायी बैन।',
+    r6: 'हमेशा किरदार में रहें।',
+    r7: 'मेटागेमिंग मना है।',
+    r8: 'पावरगेमिंग मना है।',
+    r9: 'अपने जीवन को महत्व दें।',
+    r10: 'FearRP का पालन करें।',
+    r11: 'RDM और VDM मना है।',
+    r12: 'हिंसा से पहले RP जरूरी है।',
+    r13: 'किल-ऑन-साइट मना है।',
+    r14: 'बदला लेना मना है।',
+    r15: 'दंड दिए जाएंगे।',
+    r16: 'बार-बार उल्लंघन पर कड़ा दंड।',
+    r17: 'नियम न जानना बहाना नहीं।',
+
+    feat1: 'यथार्थवादी जॉब सिस्टम',
+    feat2: 'उन्नत बिज़नेस सिस्टम',
+    feat3: 'संतुलित अर्थव्यवस्था',
+    feat4: 'कस्टम वाहन और मैपिंग',
+    feat5: 'इंटरएक्टिव इंटीरियर्स',
+    feat6: 'एंटी-चीट सिस्टम',
+    feat7: 'नियमित अपडेट',
+
+    pd1: 'कमांड चेन का पालन करें।',
+    pd2: 'बल का उपयोग RP के साथ करें।',
+    pd3: 'भ्रष्टाचार बिना अनुमति मना है।',
+    pd4: 'पेशेवर व्यवहार अनिवार्य है।',
+
+    ems1: 'जीवन बचाना प्राथमिकता है।',
+    ems2: 'आपातकालीन RP से इनकार नहीं।',
+    ems3: 'यथार्थवादी मेडिकल RP करें।',
+
+    gang1: 'गैंग कार्यों के लिए RP कारण चाहिए।',
+    gang2: 'रैंडम गोलीबारी मना है।',
+    gang3: 'गैंग वार के लिए अनुमति चाहिए।',
+    gang4: 'FearRP का पालन करें।',
+
+    faq1q: 'SA-MP क्या है?',
+    faq1a: 'SA-MP GTA San Andreas का मल्टीप्लेयर मोड है।',
+    faq2q: 'क्या नए खिलाड़ी खेल सकते हैं?',
+    faq2a: 'हाँ, नए खिलाड़ी स्वागत योग्य हैं।',
+    faq3q: 'क्या Discord ज़रूरी है?',
+    faq3a: 'हाँ, Discord अनिवार्य है।',
+    faq4q: 'क्या सर्वर व्हाइटलिस्ट है?',
+    faq4a: 'कुछ सुविधाओं के लिए अनुमति चाहिए।'
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[lang] && dict[lang][key]) {
+      el.textContent = dict[lang][key];
+    }
+  });
+}
+
+setLang('en');
+const langSelect = document.getElementById('langSelect');
+if (langSelect) {
+  langSelect.addEventListener('change', e => setLang(e.target.value));
+}
+
+// ===== SCROLL REVEAL =====
+const revealEls=document.querySelectorAll('.reveal');
+const revealOnScroll=()=>{
+  revealEls.forEach(el=>{
+    if(el.getBoundingClientRect().top < window.innerHeight-120){
+      el.classList.add('active');
+    }
+  });
+};
+window.addEventListener('scroll',revealOnScroll);
+revealOnScroll();
+
+
+// ===== PARALLAX =====
+const bg=document.getElementById('bg');
+window.addEventListener('scroll',()=>{
+  if(bg){bg.style.transform=`translateY(${window.scrollY*0.15}px)`}
+});
+
+// ===== STAGGER TRIGGER =====
+const staggers=document.querySelectorAll('.stagger');
+const staggerReveal=()=>{
+  staggers.forEach(s=>{
+    if(s.getBoundingClientRect().top<window.innerHeight-120){s.classList.add('active')}
+  })
+};
+window.addEventListener('scroll',staggerReveal);
+staggerReveal();
+
+
+// ===== PAGE LOADER =====
+window.addEventListener('load',()=>{
+  const l=document.getElementById('loader');
+  if(l)l.style.display='none';
+});
+
+// ===== PARTICLES (DESKTOP ONLY) =====
+if(window.innerWidth>768){
+  const c=document.getElementById('particles');
+  const ctx=c.getContext('2d');
+  c.width=innerWidth;c.height=innerHeight;
+  const ps=[...Array(70)].map(()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:Math.random()-.5,vy:Math.random()-.5}));
+  const animate=()=>{
+    ctx.clearRect(0,0,c.width,c.height);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;ctx.fillStyle='rgba(155,77,255,.6)';ctx.fillRect(p.x,p.y,2,2)});
+    requestAnimationFrame(animate);
+  };animate();
+}
+
+// ===== CURSOR GLOW (DESKTOP ONLY) =====
+if(window.innerWidth>768){
+  const cursor=document.getElementById('cursor');
+  document.addEventListener('mousemove',e=>{
+    cursor.style.left=e.clientX+'px';
+    cursor.style.top=e.clientY+'px';
+  });
+}
+
+// ===== CLICK RIPPLE =====
+document.addEventListener('click',e=>{
+  const r=document.createElement('div');
+  r.className='click-ripple';
+  r.style.left=e.clientX+'px';
+  r.style.top=e.clientY+'px';
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),600);
+});
+
+</script>
+</body>
+</html>
